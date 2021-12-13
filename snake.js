@@ -1,7 +1,7 @@
 class Snake {
 	constructor(x, y, size) {
-		this.x = x;
-		this.y = y;
+		this.x = Math.floor((Math.random() * canvas.width) / size) * size;
+		this.y = Math.floor((Math.random() * canvas.height) / size) * size;
 		this.size = size;
 		this.tail = [{ x: this.x, y: this.y }];
 		this.rotateX = 0;
@@ -61,6 +61,9 @@ class Apple {
 }
 
 var canvas = document.getElementById("canvas");
+var main = getComputedStyle(document.querySelector("#main"));
+
+canvas.width = parseInt(main.width);
 
 var snake = new Snake(20, 20, 20);
 
@@ -71,7 +74,14 @@ var canvasContext = canvas.getContext("2d");
 var pause = false;
 
 window.onload = () => {
-	gameLoop();
+	if (navigator.userAgent.includes("Mobile")) {
+		var body = document.getElementsByTagName("body");
+		body.innerHTMl = `<h2>Acesse este website em um computador ou notebook.</h2>`;
+		// body.style.
+		return;
+	} else {
+		gameLoop();
+	}
 };
 
 function gameLoop() {
@@ -126,20 +136,20 @@ function checkCollisionWithWall() {
 }
 
 function draw() {
-	createRect(0, 0, canvas.width, canvas.height, "black");
+	createRect(0, 0, canvas.width, canvas.height, "#2B2B2B");
 	for (let i = 0; i < snake.tail.length; i++) {
 		createRect(
 			snake.tail[i].x + 2.5,
 			snake.tail[i].y + 2.5,
 			snake.size - 5,
 			snake.size - 5,
-			"white"
+			"#FFFFFF"
 		);
 	}
 
 	canvasContext.font = "20px Arial";
-	canvasContext.fillStyle = "#00FF42";
-	canvasContext.fillText(`Score: ${snake.tail.length - 1}`, 20, 40, 64);
+	canvasContext.fillStyle = "#FFFFFF";
+	canvasContext.fillText(`Score: ${snake.tail.length - 1}`, 20, 40, 200);
 	createRect(apple.x, apple.y, apple.size, apple.size, apple.color);
 }
 
@@ -150,8 +160,8 @@ function createRect(x, y, width, height, color) {
 
 window.addEventListener("keydown", (event) => {
 	setTimeout(() => {
-    if (!pause) {
-      if (event.keyCode == 37 && snake.rotateX != 1) {
+		if (!pause) {
+			if (event.keyCode == 37 && snake.rotateX != 1) {
 				snake.rotateX = -1;
 				snake.rotateY = 0;
 			} else if (event.keyCode == 38 && snake.rotateY != 1) {
@@ -164,7 +174,7 @@ window.addEventListener("keydown", (event) => {
 				snake.rotateX = 0;
 				snake.rotateY = 1;
 			}
-    }
+		}
 
 		if (event.keyCode == 13) {
 			pause = pause == true ? false : true;
